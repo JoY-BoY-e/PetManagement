@@ -1,13 +1,13 @@
 import React,{useState,useContext} from 'react'
 import axois from 'axios';
 import {AuthContext} from '../components/Authentication';
-import { NavLink,useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const auth=useContext(AuthContext);
-    const Navigate=useNavigate();
+    // const Navigate=useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
