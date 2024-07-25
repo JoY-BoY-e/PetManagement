@@ -1,0 +1,20 @@
+/* transitions.css */
+.scale-enter {
+    transform: scale(0.5);
+  }
+  .scale-enter-active {
+    transform: scale(1);
+    transition: transform 500ms;
+  }
+  .scale-exit {
+    /* transform: scale(1); */
+    opacity: 1;
+
+  }
+  .scale-exit-active {
+    /* transform: scale(0.5); */
+    opacity: 1;
+    transition:  500ms;
+  }
+  
+  /* transitions.css */
