@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import axios from 'axios'
-import Popup from './Popup';
-import Pop from '../components/PopUp/Pop';
+// import Popup from './Popup';
+// import Pop from '../components/PopUp/Pop';
 import Cookies from 'js-cookie';
 import AddPetPopup from './PopUps/AddPetPopup';
 import EditPetPopup from './PopUps/EditPetPopup';
