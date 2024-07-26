@@ -1,6 +1,6 @@
 import React,{useState,useContext} from 'react'
 import axois from 'axios';
-import {AuthContext} from '../components/Authentication';
+import {AuthContext} from '../components/Authentication/Authentication';
 import { NavLink,useNavigate } from 'react-router-dom';
 
 const SignUp = () => {

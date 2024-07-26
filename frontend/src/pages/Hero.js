@@ -1,9 +1,16 @@
 import React,{useEffect, useState} from 'react'
 import axios from 'axios'
 import Popup from './Popup';
-import Pop from '../components/Pop';
+import Pop from '../components/PopUp/Pop';
 import Cookies from 'js-cookie';
+import AddPetPopup from './PopUps/AddPetPopup';
+import EditPetPopup from './PopUps/EditPetPopup';
+import PopUpHoc from '../components/PopUp/PopUpHoc';
+import ClosePopup from './PopUps/ClosePopup';
 // import {AuthContext} from '../components/Authentication';
+const AddPetPopupWithHoc = PopUpHoc(AddPetPopup);
+const EditPetPopupWithHoc = PopUpHoc(EditPetPopup);
+const ClosePopupWithHoc = PopUpHoc(ClosePopup);
 
 const Hero = () => {
   // const auth=useContext(AuthContext);
@@ -11,6 +18,8 @@ const Hero = () => {
   const [addflag,setAddFlag]=useState(false);
   const [delFlag,setDelFlag]=useState(false);
   const [editFlag,setEditFlag]=useState(false);
+  const [petEdit,setPetEdit]=useState(null);
+
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/pets',{
@@ -30,17 +39,7 @@ const Hero = () => {
     setAddFlag(!addflag);
   }
 
-  const removePet = (id)=>{
-    axios.delete(`http://localhost:5000/api/pets/${id}`,{
-      headers: {
-        'Authorization': `Bearer ${Cookies.get('authToken')}`
-      }
-    })
-    .then((response)=>{
-      setPets(pets.filter((pet)=> pet._id !== id));
-       setDelFlag(false);
-  });
-  } 
+  
 
   return (
     
@@ -61,10 +60,11 @@ const Hero = () => {
         <h2 className='w-100'>Your Pets</h2>
       </div>
        {/* {addflag?<Popup flag={addflag} trigger={setAddFlag} pet={{pets , setPets}}/>:null} */}
-       {addflag?<Pop trigger={setAddFlag} width='w-75' height='h-75'>
+       {/* {addflag?<Pop trigger={setAddFlag} width='w-75' height='h-75'>
         <Popup title='Add a Pet' trigger={setAddFlag} pet={{pets , setPets}}/> 
-        </Pop>:null}
-      
+        </Pop>:null} */}
+        {addflag?<AddPetPopupWithHoc width='w-75' height='h-75' trigger={setAddFlag} pet={{pets , setPets}}/>:null}
+        {editFlag?<EditPetPopupWithHoc width='w-75' height='h-75' trigger={setEditFlag} pets={{pets , setPets}} pet={petEdit}/>:null}
       <div className='d-flex flex-wrap justify-content-evenly align-items-center gap-4'>
         {/* //The pets added should be displayed in card form, with buttons as edit and delete. */}
         { pets.length>0?(pets.map((pet,key) => {
@@ -79,15 +79,25 @@ const Hero = () => {
             <p>Weight: {pet.weight}kg</p>
             <p>Price: ${pet.price}</p>
             <div className='d-flex flex-row gap-2 justify-content-around w-100'>
-            <button onClick={()=>setEditFlag(true)} className='btn btn-primary'>Edit</button>
-            {
+            <button onClick={()=>{setEditFlag(true)
+            setPetEdit(pet)
+            }} className='btn btn-primary'>Edit</button>
+            {/* {
               editFlag?<Pop trigger={setEditFlag} width='w-75' height='h-75' >
                 <Popup title='Edit a Pet' petId={pet._id} trigger={setEditFlag} pet={{pets , setPets}}/> 
               </Pop>:null
-            }
-            <button onClick={()=>setDelFlag(true)} className='btn btn-danger'>Delete</button>
+            } */}
+            
+            <button onClick={()=>{setDelFlag(true)
+              setPetEdit(pet)
+            }} className='btn btn-danger'>Delete</button>
             </div>
-            { delFlag?<Pop trigger={setDelFlag} width='w-25' height='h-25'>
+            
+          </div>
+        </div>
+        )})):<h1>No pets found</h1>}
+
+          {/* { delFlag?<Pop trigger={setDelFlag} width='w-25' height='h-25'>
             <div className='m-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center' >
             <h3 className='fs-5'>Are u sure?</h3>
             <div className='my-4 w-75 d-flex justify-content-between align-items-center column-gap-4 flex-wrap ' >
@@ -95,10 +105,8 @@ const Hero = () => {
             <button onClick={()=>setDelFlag(false)} className='btn btn-danger' style={{maxWidth:"5rem", margin:"0 auto"}}>No</button>
             </div>
             </div>
-            </Pop>:null }
-          </div>
-        </div>
-        )})):<h1>No pets found</h1>}
+            </Pop>:null } */}
+         {delFlag?<ClosePopupWithHoc trigger={setDelFlag} width='w-25' height='h-25' pets={{pets,setPets}} pet={petEdit} />:null}   
         
       </div>
      

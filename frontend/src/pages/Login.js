@@ -1,6 +1,6 @@
 import React,{useState,useContext} from 'react'
 import axois from 'axios';
-import {AuthContext} from '../components/Authentication';
+import {AuthContext} from '../components/Authentication/Authentication';
 import { NavLink } from 'react-router-dom';
 
 const Login = () => {
@@ -30,7 +30,7 @@ const Login = () => {
             console.log(response.data);
             if(response.data.success){
                // alert(response.data.success);
-               console.log(response.data.token);
+            //    console.log(response.data.token);
                 auth[0].login(response.data.token);
                 fl= true;
             }

@@ -1,5 +1,5 @@
 import React, { useContext} from "react";
-import { AuthContext } from "./Authentication";
+import { AuthContext } from "../Authentication/Authentication";
 import { useNavigate } from "react-router-dom";
 //bootstrap
 

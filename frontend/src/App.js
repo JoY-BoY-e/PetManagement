@@ -1,12 +1,12 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 import Login from "./pages/Login";
 import Hero from "./pages/Hero";
 import {  Routes, Route } from "react-router-dom";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
-import { AuthContext } from "./components/Authentication";
+import { AuthContext } from "./components/Authentication/Authentication";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useContext } from "react";
 import { useLocation } from "react-router-dom";
