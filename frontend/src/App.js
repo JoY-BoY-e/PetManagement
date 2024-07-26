@@ -22,7 +22,7 @@ function App() {
           <Routes location={location}>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            {auth[0].user ? <Route path="/" element={<Hero />} /> : null}
+            {auth[0].user ? <Route path="/" element={<Hero />} /> : <Route path="/" element={<Login />} />}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </CSSTransition>

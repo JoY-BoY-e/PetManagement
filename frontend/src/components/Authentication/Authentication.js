@@ -9,6 +9,7 @@ export const AuthContext = createContext(
 );
 
 export const Authentication = ({children}) => {
+  
     const [authToken, setAuthToken] = useState(()=>{
         const cookieUser = Cookies.get('authToken');
        // console.log(JSON.parse(cookieUser));
@@ -21,10 +22,19 @@ export const Authentication = ({children}) => {
             setUser(jwtDecode(authToken));
         }
     }, [authToken]);
+    //token expire then logout
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (user && user.exp * 1000 < new Date().getTime()) {
+                logOut();
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [user]);
 
     const login = (token) => {
         Cookies.set('authToken', JSON.stringify(token));
-        //console.log(token, JSON.stringify(token));
+        console.log(jwtDecode(token));
         setAuthToken(token);
         setUser(jwtDecode(token));
     };
@@ -36,7 +46,7 @@ export const Authentication = ({children}) => {
         setUser(null);
     };
     // Your code here
-    const value = [{user,login,logOut}];
+    const value = [{user,authToken,login,logOut}];
     return (
         <AuthContext.Provider value={value}>
             {children}

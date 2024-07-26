@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { Form } from 'react-bootstrap';
 import axios from 'axios';
-import Cookie from 'js-cookie';
+// import auth from '../components/Authentication/Authentication';
+import {AuthContext} from '../../components/Authentication/Authentication';
 
 const AddPetPopup = (props) => {
+    const auth = useContext(AuthContext);
   const [name, setName] = useState('');
   const [age, setAge] = useState(null);
   const [breed, setBreed] = useState('');
@@ -18,7 +20,7 @@ const AddPetPopup = (props) => {
       weight: weight,
       price: price
     }, {
-      headers: { 'Authorization': `Bearer ${Cookie.get('authToken')}` }
+      headers: { 'Authorization': `Bearer ${auth[0].authToken}` }
     })
       .then((response) => {
         props.pet.setPets([...props.pet.pets, response.data]);
