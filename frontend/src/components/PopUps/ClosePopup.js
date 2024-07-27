@@ -1,6 +1,6 @@
 import React,{useContext} from 'react'
 import axios from 'axios';
-import {AuthContext} from '../../components/Authentication/Authentication';
+import {AuthContext} from '../Authentication/Authentication';
 
 const ClosePopup = (props) => {
     const auth = useContext(AuthContext);

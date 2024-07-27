@@ -1,7 +1,7 @@
 import React, { useState, useEffect,useContext } from 'react';
 import { Form } from 'react-bootstrap';
 import axios from 'axios';
-import {AuthContext} from '../../components/Authentication/Authentication';
+import {AuthContext} from '../Authentication/Authentication';
 
 const EditPetPopup = (props) => {
     const auth = useContext(AuthContext);

@@ -1,10 +1,10 @@
 import React,{useEffect, useState,useContext} from 'react'
 import axios from 'axios'
 import Footer from '../components/Footer/Footer';
-import AddPetPopup from './PopUps/AddPetPopup';
-import EditPetPopup from './PopUps/EditPetPopup';
+import AddPetPopup from '../components/PopUps/AddPetPopup';
+import EditPetPopup from '../components/PopUps/EditPetPopup';
 import PopUpHoc from '../components/PopUp/PopUpHoc';
-import ClosePopup from './PopUps/ClosePopup';
+import ClosePopup from '../components/PopUps/ClosePopup';
 import Card from '../components/Card/Card';
 import {AuthContext} from '../components/Authentication/Authentication';
 
