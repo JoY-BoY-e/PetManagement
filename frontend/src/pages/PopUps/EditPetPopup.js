@@ -23,7 +23,10 @@ const EditPetPopup = (props) => {
   }, [props.pet]);
 
   const editPet = () => {
-    axios.put(`http://localhost:5000/api/pets/${props.pet._id}`, {
+    if(!auth[0].user.email){
+      return;
+    }
+    axios.put(`http://localhost:5000/api/pets/${props.pet._id}/${auth[0].user.email}`, {
       name: name,
       age: age,
       breed: breed,

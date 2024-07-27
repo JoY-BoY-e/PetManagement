@@ -13,7 +13,8 @@ const EditPetPopupWithHoc = PopUpHoc(EditPetPopup);
 const ClosePopupWithHoc = PopUpHoc(ClosePopup);
 
 const Hero = () => {
-  const auth=useContext(AuthContext)[0].authToken;
+  
+  const auth=useContext(AuthContext)[0];
   const [pets, setPets] = useState([]);
   const [addflag,setAddFlag]=useState(false);
   const [delFlag,setDelFlag]=useState(false);
@@ -22,17 +23,21 @@ const Hero = () => {
 
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/pets',{
+    if(!auth.user.email){
+      return;
+    }
+    axios.get(`http://localhost:5000/api/pets/${auth.user.email}`,{
       headers: {
-        'Authorization': `Bearer ${auth}`
+        'Authorization': `Bearer ${auth.authToken}`
       }
     })
       .then((response) => {
         setPets(()=>response.data);
       }).catch((error) => {
         console.log(error);
+        
       });
-  }, [(auth)]);
+  }, [auth]);
 
   
   const handleAddPet=async ()=>{
@@ -63,7 +68,6 @@ const Hero = () => {
         {addflag?<AddPetPopupWithHoc width='w-75' height='h-75' trigger={setAddFlag} pet={{pets , setPets}}/>:null}
         {editFlag?<EditPetPopupWithHoc width='w-75' height='h-75' trigger={setEditFlag} pets={{pets , setPets}} pet={petEdit}/>:null}
       <div className='d-flex flex-wrap justify-content-evenly align-items-center gap-4'>
-        {/* //The pets added should be displayed in card form, with buttons as edit and delete. */}
         { pets.length>0?(pets.map((pet,key) => {
           return (
           <Card key={key} pet={pet} triggerDel={setDelFlag} triggerEdit={setEditFlag} setPetToEdit={setPetEdit} />

@@ -13,7 +13,10 @@ const AddPetPopup = (props) => {
   const [price, setPrice] = useState(null);
 
   const addPet = () => {
-    axios.post('http://localhost:5000/api/pets', {
+    if(!auth[0].user.email){
+      return;
+    }
+    axios.post(`http://localhost:5000/api/pets/${auth[0].user.email}`, {
       name: name,
       age: age,
       breed: breed,

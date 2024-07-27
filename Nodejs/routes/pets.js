@@ -12,18 +12,24 @@ const User=require('../models/User');
  *       200:
  *         description: Success
  */
-router.get('/pets', async (req, res) => {
-  try {
-    const [header,token]=req.headers.authorization.split(' ');
-    // console.log(token);
-    const decoded=Jwt.verify(JSON.parse(token),'your_secret_key');
-    // console.log(decoded);
-    if(!decoded){
-      return res.status(401).json({message:'Unauthorized'});
-    }
-    const user= await User.findOne({name:decoded.username});
-    console.log(user);
-    const pets = await Pet.find({userEmail:user.email});
+
+const verifyToken = (req, res, next) => {
+  const [header, token] = req.headers.authorization.split(' ');
+  if (!token) return res.status(403).json({ error: 'No token provided' });
+
+  Jwt.verify(JSON.parse(token), 'your_secret_key', (err, decoded) => {
+      if (err) return res.status(500).json({ error: 'Failed to authenticate token' });
+      
+      if(req.params.email === decoded.email)
+          next();
+      else
+          return res.status(403).json({ error: 'Unauthorized' });
+  });
+};
+router.get('/pets/:email',verifyToken, async (req, res) => {
+  try { 
+    const email=req.params.email;
+    const pets = await Pet.find({userEmail: email});
     if (!pets) return res.status(404).json({ message: 'No pets found' });
     res.json(pets);
   } catch (err) {
@@ -51,25 +57,17 @@ router.get('/pets', async (req, res) => {
  *       201:
  *         description: Created
  */
-router.post('/pets', async (req, res) => {
+router.post('/pets/:email',verifyToken,async (req, res) => {
  
 
   try {
-    const [header,token]=req.headers.authorization.split(' ');
-    console.log(token);
-    const decoded=Jwt.verify(JSON.parse(token),'your_secret_key');
-    // console.log(decoded);
-    if(!decoded){
-      return res.status(401).json({message:'Unauthorized'});
-    }
-    const user= await User.findOne({name:decoded.username});
     const pet = new Pet({
       name: req.body.name,
       age: req.body.age,
       breed: req.body.breed,
       weight: req.body.weight,
       price: req.body.price,
-      userEmail:user.email
+      userEmail:req.params.email
     });
     const newPet = await pet.save();
     res.status(201).json(newPet);
@@ -77,17 +75,10 @@ router.post('/pets', async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
-router.delete('/pets/:id', async (req, res) => {
+router.delete('/pets/:id/:email',verifyToken,async (req, res) => {
   try {
-    const [header,token]=req.headers.authorization.split(' ');
-    // console.log(token);
-    const decoded=Jwt.verify(JSON.parse(token),'your_secret_key');
-    console.log(decoded);
-    if(!decoded){
-      return res.status(401).json({message:'Unauthorized'});
-    }
-    const user= await User.findOne({name:decoded.username});
-    const pet = await Pet.deleteOne({ _id: req.params.id,userEmail:user.email });
+    const email=req.params.email;
+    const pet = await Pet.deleteOne({ _id: req.params.id,userEmail: email });
     console.log(pet);
     if (pet.deletedCount==0) return res.status(404).json({ message: 'Pet not found' });
     res.json({ message: 'Deleted Pet' });
@@ -96,18 +87,11 @@ router.delete('/pets/:id', async (req, res) => {
   }
 });
 
-router.put('/pets/:id', async (req, res) => {
+router.put('/pets/:id/:email',verifyToken,async (req, res) => {
   try {
-    const [header,token]=req.headers.authorization.split(' ');
-    // console.log(token);
-    const decoded=Jwt.verify(JSON.parse(token),'your_secret_key');
-    // console.log(decoded);
-    if(!decoded){
-      return res.status(401).json({message:'Unauthorized'});
-    }
-    const user= await User.findOne({name:decoded.username});
+    
     const pet = await Pet.findOneAndUpdate(
-      { _id: req.params.id,userEmail:user.email },
+      { _id: req.params.id,userEmail:req.params.email },
       {
         name: req.body.name,
         age: req.body.age,

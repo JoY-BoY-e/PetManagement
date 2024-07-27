@@ -1,12 +1,16 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import axios from 'axios';
-import Cookies from 'js-cookie'
+import {AuthContext} from '../../components/Authentication/Authentication';
 
 const ClosePopup = (props) => {
+    const auth = useContext(AuthContext);
     const removePet = (id)=>{
-        axios.delete(`http://localhost:5000/api/pets/${id}`,{
+    if(!auth[0].user.email){
+      return;
+    }
+        axios.delete(`http://localhost:5000/api/pets/${id}/${auth[0].user.email}`,{
           headers: {
-            'Authorization': `Bearer ${Cookies.get('authToken')}`
+            'Authorization': `Bearer ${auth[0].authToken}`
           }
         })
         .then((response)=>{
