@@ -5,7 +5,8 @@ const Footer = () => {
         <footer className='w-100' style={
             {
                 backdropFilter: 'blur(5px)',
-                borderTop: '1px dotted white',
+                borderTop: '1px dashed white',
+                boxShadow: '0 0 20px 0 blue',
                 padding: '1rem 0',
             }
         }>
@@ -15,7 +16,7 @@ const Footer = () => {
                         <h3>Our Address</h3>
                         <p>123, Main Street, Your City</p>
                         <p>1234567890</p>
-                        <p><a href="mailto:salmanmehmood19j@gmail.com">Mail</a></p>
+                        <p><a className='text-info text-decoration-none' href="mailto:salmanmehmood19j@gmail.com">Send a Mail</a></p>
                     </div>
                     <div className="col-lg-4 col-md-4">
                         <p className="text-center">All rights reserved</p>

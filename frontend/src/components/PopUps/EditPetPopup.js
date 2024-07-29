@@ -1,7 +1,7 @@
 import React, { useState, useEffect,useContext } from 'react';
 import { Form } from 'react-bootstrap';
 import axios from 'axios';
-import {AuthContext} from '../../components/Authentication/Authentication';
+import {AuthContext} from '../Authentication/Authentication';
 
 const EditPetPopup = (props) => {
     const auth = useContext(AuthContext);
@@ -23,7 +23,10 @@ const EditPetPopup = (props) => {
   }, [props.pet]);
 
   const editPet = () => {
-    axios.put(`http://localhost:5000/api/pets/${props.pet._id}`, {
+    if(!auth[0].user.email){
+      return;
+    }
+    axios.put(`http://localhost:5000/api/pets/${props.pet._id}/${auth[0].user.email}`, {
       name: name,
       age: age,
       breed: breed,
